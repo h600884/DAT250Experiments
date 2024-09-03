@@ -20,7 +20,6 @@ public class DomainManager {
 
     // User management
     public User addUser(User user) {
-        user.setUsername(UUID.randomUUID().toString());  // Assign a unique identifier
         users.put(user.getUsername(), user);
         return user;
     }
