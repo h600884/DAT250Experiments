@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/vote-options")
+@RequestMapping("/voteoptions")
 public class VoteOptionController {
 
     @Autowired
@@ -25,8 +25,8 @@ public class VoteOptionController {
 
     @GetMapping("/{optionId}")
     public ResponseEntity<VoteOption> getVoteOption(@PathVariable String optionId) {
-        Optional<VoteOption> voteOption = repo.getVoteOption(optionId);
-        return voteOption.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        VoteOption voteOption = repo.getVoteOption(optionId);
+        return new ResponseEntity<>(voteOption, HttpStatus.OK);
     }
 
     @GetMapping

@@ -25,8 +25,8 @@ public class VoteController {
 
     @GetMapping("/{voteId}")
     public ResponseEntity<Vote> getVote(@PathVariable String voteId) {
-        Optional<Vote> vote = repo.getVote(voteId);
-        return vote.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Vote vote = repo.getVote(voteId);
+        return new ResponseEntity<>(vote, HttpStatus.OK);
     }
 
     @GetMapping

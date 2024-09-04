@@ -24,9 +24,9 @@ public class PollController {
     }
 
     @GetMapping("/{pollId}")
-    public ResponseEntity<Poll> getPoll(@PathVariable String pollId) {
-        Optional<Poll> poll = repo.getPoll(pollId);
-        return poll.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Poll> getPoll(@PathVariable Integer pollId) {
+        Poll poll = repo.getPoll(pollId);
+        return new ResponseEntity<>(poll, HttpStatus.OK);
     }
 
     @GetMapping
@@ -35,7 +35,7 @@ public class PollController {
     }
 
     @DeleteMapping("/{pollId}")
-    public ResponseEntity<Void> deletePoll(@PathVariable String pollId) {
+    public ResponseEntity<Void> deletePoll(@PathVariable Integer pollId) {
         repo.deletePoll(pollId);
         return ResponseEntity.noContent().build();
     }

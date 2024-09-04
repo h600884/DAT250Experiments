@@ -4,21 +4,21 @@ import no.hvl.dat250.pollapp.models.Poll;
 import no.hvl.dat250.pollapp.models.User;
 import no.hvl.dat250.pollapp.models.Vote;
 import no.hvl.dat250.pollapp.models.VoteOption;
+
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class DomainManager {
 
     // Lagring i minnet ved bruk av HashMaps
     private Map<Integer, User> users = new HashMap<>();
-    private Map<String, Poll> polls = new HashMap<>();
+    private Map<Integer, Poll> polls = new HashMap<>();
     private Map<String, VoteOption> voteOptions = new HashMap<>();
     private Map<String, Vote> votes = new HashMap<>();
 
-    // User management
+    // User metoder
     public User createUser(User user) {
         users.put(user.getId(), user);
         return user;
@@ -36,26 +36,25 @@ public class DomainManager {
         users.remove(id);
     }
 
-    // Poll management
+    // Poll metoder
     public Poll addPoll(Poll poll) {
-        poll.setQuestion(UUID.randomUUID().toString());
-        polls.put(poll.getQuestion(), poll);
+        polls.put(poll.getPollId(), poll);
         return poll;
     }
 
-    public Optional<Poll> getPoll(String pollId) {
-        return Optional.ofNullable(polls.get(pollId));
+    public Poll getPoll(Integer pollId) {
+        return polls.get(pollId);
     }
 
     public List<Poll> getAllPolls() {
         return new ArrayList<>(polls.values());
     }
 
-    public void deletePoll(String pollId) {
+    public void deletePoll(Integer pollId) {
         polls.remove(pollId);
     }
 
-    // VoteOption management
+    // VoteOption metoder
     public VoteOption addVoteOption(VoteOption option) {
         voteOptions.put(option.getCaption(), option);
         return option;
@@ -65,22 +64,22 @@ public class DomainManager {
         return new ArrayList<>(voteOptions.values());
     }
 
-    public Optional<VoteOption> getVoteOption(String optionId) {
-        return Optional.ofNullable(voteOptions.get(optionId));
+    public VoteOption getVoteOption(String optionId) {
+        return voteOptions.get(optionId);
     }
 
     public void deleteVoteOption(String optionId) {
         voteOptions.remove(optionId);
     }
 
-    // Vote management
+    // Vote metoder
     public Vote addVote(Vote vote) {
         votes.put(vote.getPublishedAt().toString(), vote);
         return vote;
     }
 
-    public Optional<Vote> getVote(String voteId) {
-        return Optional.ofNullable(votes.get(voteId));
+    public Vote getVote(String voteId) {
+        return votes.get(voteId);
     }
 
     public List<Vote> getAllVotes() {
