@@ -13,32 +13,32 @@ import java.util.stream.Collectors;
 public class DomainManager {
 
     // Lagring i minnet ved bruk av HashMaps
-    private Map<String, User> users = new HashMap<>();
+    private Map<Integer, User> users = new HashMap<>();
     private Map<String, Poll> polls = new HashMap<>();
     private Map<String, VoteOption> voteOptions = new HashMap<>();
     private Map<String, Vote> votes = new HashMap<>();
 
     // User management
-    public User addUser(User user) {
-        users.put(user.getUsername(), user);
+    public User createUser(User user) {
+        users.put(user.getId(), user);
         return user;
     }
 
-    public Optional<User> getUser(String username) {
-        return Optional.ofNullable(users.get(username));
+    public User getUser(Integer id) {
+        return users.get(id);
     }
 
     public List<User> getAllUsers() {
         return new ArrayList<>(users.values());
     }
 
-    public void deleteUser(String username) {
-        users.remove(username);
+    public void deleteUser(Integer id) {
+        users.remove(id);
     }
 
     // Poll management
     public Poll addPoll(Poll poll) {
-        poll.setQuestion(UUID.randomUUID().toString());  // Assign a unique identifier
+        poll.setQuestion(UUID.randomUUID().toString());
         polls.put(poll.getQuestion(), poll);
         return poll;
     }

@@ -17,26 +17,27 @@ public class UserController {
     @Autowired
     private DomainManager repo;
 
-    @GetMapping("/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        Optional<User> user = repo.getUser(username);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = repo.addUser(user);
+        User createdUser = repo.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return repo.getAllUsers();
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Integer id) {
+        User user = repo.getUser(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        repo.deleteUser(username);
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(repo.getAllUsers(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        repo.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 }
