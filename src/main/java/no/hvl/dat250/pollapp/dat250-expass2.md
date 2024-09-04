@@ -1,4 +1,4 @@
-Gjennom "params"
+Når jeg prøver å lage en bruker gjennom "params"
 {
 "timestamp": "2024-09-03T20:03:02.447+00:00",
 "status": 400,
