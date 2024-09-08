@@ -23,9 +23,9 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Integer id) {
-        User user = repo.getUser(id);
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getUser(@PathVariable String username) {
+        User user = repo.getUser(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -35,9 +35,15 @@ public class UserController {
         return new ResponseEntity<>(repo.getAllUsers(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
-        repo.deleteUser(id);
+    @PutMapping("/{username}")
+    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
+        User updatedUser = repo.updateUser(username, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
+        repo.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 }

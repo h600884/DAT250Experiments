@@ -19,12 +19,12 @@ public class VoteController {
 
     @PostMapping
     public ResponseEntity<Vote> createVote(@RequestBody Vote vote) {
-        Vote createdVote = repo.addVote(vote);
-        return new ResponseEntity<>(createdVote, HttpStatus.CREATED);
+        Vote newVote = repo.addVoteOnOption(vote.getUsername(), vote.getPollId(), vote.getVoteOptionId(), vote.getPublishedAt());
+        return new ResponseEntity<>(newVote, HttpStatus.CREATED);
     }
 
     @GetMapping("/{voteId}")
-    public ResponseEntity<Vote> getVote(@PathVariable String voteId) {
+    public ResponseEntity<Vote> getVote(@PathVariable Integer voteId) {
         Vote vote = repo.getVote(voteId);
         return new ResponseEntity<>(vote, HttpStatus.OK);
     }
@@ -34,8 +34,14 @@ public class VoteController {
         return repo.getAllVotes();
     }
 
+    @PutMapping("/{voteId}")
+    public ResponseEntity<Vote> updateVote(@PathVariable Integer voteId, @RequestBody Vote vote) {
+        Vote updatedVote = repo.updateVote(voteId, vote);
+        return new ResponseEntity<>(updatedVote, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{voteId}")
-    public ResponseEntity<Void> deleteVote(@PathVariable String voteId) {
+    public ResponseEntity<Void> deleteVote(@PathVariable Integer voteId) {
         repo.deleteVote(voteId);
         return ResponseEntity.noContent().build();
     }

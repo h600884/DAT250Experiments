@@ -1,15 +1,37 @@
 package no.hvl.dat250.pollapp.models;
 
+import java.util.List;
+
 public class VoteOption {
 
+    private Integer voteOptionId;
+    private Integer pollId;
     private String caption;
-    private int presentationOrder;
+    private Integer presentationOrder;
+    private List<Vote> votes;
 
-    private Poll poll;
-
-    public VoteOption(String caption, int presentationOrder) {
+    public VoteOption(Integer voteOptionId, Integer pollId, String caption, Integer presentationOrder, List<Vote> votes) {
+        this.voteOptionId = voteOptionId;
+        this.pollId = pollId;
         this.caption = caption;
         this.presentationOrder = presentationOrder;
+        this.votes = votes;
+    }
+
+    public Integer getVoteOptionId() {
+        return voteOptionId;
+    }
+
+    public void setVoteOptionId(Integer voteOptionId) {
+        this.voteOptionId = voteOptionId;
+    }
+
+    public Integer getPollId() {
+        return pollId;
+    }
+
+    public void setPollId(Integer pollId) {
+        this.pollId = pollId;
     }
 
     public String getCaption() {
@@ -20,11 +42,19 @@ public class VoteOption {
         this.caption = caption;
     }
 
-    public int getPresentationOrder() {
+    public Integer getPresentationOrder() {
         return presentationOrder;
     }
 
-    public void setPresentationOrder(int presentationOrder) {
+    public void setPresentationOrder(Integer presentationOrder) {
         this.presentationOrder = presentationOrder;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 }

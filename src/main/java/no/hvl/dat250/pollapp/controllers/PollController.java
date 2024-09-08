@@ -34,6 +34,12 @@ public class PollController {
         return repo.getAllPolls();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Poll> updatePoll(@PathVariable Integer id, @RequestBody Poll poll) {
+            Poll updatedPoll = repo.updatePoll(id, poll);
+            return new ResponseEntity<>(updatedPoll, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{pollId}")
     public ResponseEntity<Void> deletePoll(@PathVariable Integer pollId) {
         repo.deletePoll(pollId);

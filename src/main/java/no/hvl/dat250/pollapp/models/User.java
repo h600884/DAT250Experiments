@@ -4,21 +4,14 @@ import java.util.UUID;
 
 public class User {
 
-    private final Integer id;
     private String username;
     private String email;
 
 
     public User(String username, String email) {
-        this.id = Math.abs(UUID.randomUUID().hashCode());
         this.username = username;
         this.email = email;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
 
     public String getUsername() {
         return username;
