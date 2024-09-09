@@ -1,10 +1,10 @@
 package no.hvl.dat250.pollapp.Managers;
 
+import no.hvl.dat250.pollapp.Exception.*;
 import no.hvl.dat250.pollapp.models.Poll;
 import no.hvl.dat250.pollapp.models.User;
 import no.hvl.dat250.pollapp.models.Vote;
 import no.hvl.dat250.pollapp.models.VoteOption;
-
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -12,21 +12,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class DomainManager {
+public class PollManager {
 
-    // Lagring i minnet ved bruk av HashMaps
     private Map<String, User> users = new HashMap<>();
     private Map<Integer, Poll> polls = new HashMap<>();
-    private Map<Integer, VoteOption> voteOptions = new HashMap<>();
     private Map<Integer, Vote> votes = new HashMap<>();
-
+    private Map<Integer, VoteOption> voteOptions = new HashMap<>();
 
     private Integer nextPollId = 0;
     private Integer nextVoteId = 0;
     private Integer nextVoteOptionId = 0;
 
-    // User metoder
+    // User CRUDs
     public User createUser(User user) {
+        if (users.containsKey(user.getUsername())) {
+            throw new InvalidUsername("Username '" + user.getUsername() + "' is already taken.");
+        }
         users.put(user.getUsername(), user);
         return user;
     }
@@ -41,57 +42,65 @@ public class DomainManager {
 
     public User updateUser(String username, User updatedUser) {
         User existingUser = users.get(username);
-
-        if (existingUser != null) {
-            existingUser.setUsername(updatedUser.getUsername());
-            existingUser.setEmail(updatedUser.getEmail());
-            if (!username.equals(updatedUser.getUsername())) {
-                users.remove(username);
-                users.put(updatedUser.getUsername(), existingUser);
-            } else {
-                users.put(username, existingUser);
-            }
+        if (existingUser == null) {
+            throw new UserNotFoundException("User not found.");
         }
+
+        users.remove(username);
+
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setEmail(updatedUser.getEmail());
+
+        users.put(existingUser.getUsername(), existingUser);
+
         return existingUser;
     }
-
 
     public void deleteUser(String username) {
         users.remove(username);
     }
 
-    // Poll metoder
-    public Poll addPoll(Poll poll) {
+
+    // Poll CRUDs
+    public Poll createPoll(Poll poll) {
+        if(!users.containsKey(poll.getCreatorUsername())) {
+            throw new InvalidUsername("Username '" + poll.getCreatorUsername() + "' does not exists.");
+        }
         poll.setPollId(nextPollId++);
         polls.put(poll.getPollId(), poll);
         return poll;
     }
 
-    public Poll getPoll(Integer pollId) {
-        return polls.get(pollId);
+    public Poll getPoll(Integer id) {
+        return polls.get(id);
     }
 
     public List<Poll> getAllPolls() {
         return new ArrayList<>(polls.values());
     }
 
-    public Poll updatePoll(Integer pollId, Poll updatedPoll) {
-        Poll existingPoll = polls.get(pollId);
-
-        if (existingPoll != null) {
-            existingPoll.setQuestion(updatedPoll.getQuestion());
-            existingPoll.setValidUntil(updatedPoll.getValidUntil());
+    public Poll updatePoll(Integer id, Poll updatedPoll) {
+        Poll existingPoll = polls.get(id);
+        if (existingPoll == null) {
+            throw new PollNotFoundException("Poll not found.");
         }
 
-        polls.put(pollId, updatedPoll);
+        existingPoll.setQuestion(updatedPoll.getQuestion());
+        existingPoll.setValidUntil(updatedPoll.getValidUntil());
+
+        polls.put(id, existingPoll);
         return existingPoll;
     }
 
-    public void deletePoll(Integer pollId) {
-        polls.remove(pollId);
+    public void deletePoll(Integer id) {
+        if (!polls.containsKey(id)) {
+            throw new PollNotFoundException("Poll not found.");
+        }
+
+        polls.remove(id);
 
         List<Integer> voteOptionIds = voteOptions.values().stream()
-                .filter(voteOption -> voteOption.getPollId().equals(pollId))
+                .filter(voteOption -> voteOption.getPollId().equals(id))
                 .map(VoteOption::getVoteOptionId)
                 .collect(Collectors.toList());
 
@@ -102,16 +111,35 @@ public class DomainManager {
         }
     }
 
-    // Vote metoder
 
-    public Vote addVoteOnOption(String username, Integer pollId, Integer voteOptionId, Instant publishedAt) {
+    // Vote CRUDs
+    public Vote voteOnOption(String username, Integer pollId, Integer voteOptionId, Instant publishedAt) {
         User user = users.get(username);
+        if (user == null) {
+            throw new UserNotFoundException("User not found.");
+        }
+
         Poll poll = polls.get(pollId);
+        if (poll == null) {
+            throw new PollNotFoundException("Poll not found.");
+        }
+
         VoteOption voteOption = voteOptions.get(voteOptionId);
+        if (voteOption == null || !poll.getVoteOptions().contains(voteOption)) {
+            throw new VoteOptionNotFoundException("Vote option not found for this poll.");
+        }
+
+        for (Vote vote : voteOption.getVotes()) {
+            if (vote.getUsername().equals(user.getUsername())) {
+                throw new IllegalStateException("User has already voted on this option.");
+            }
+        }
 
         Vote newVote = new Vote(username, pollId, voteOptionId, publishedAt);
         newVote.setVoteId(nextVoteId++);
+
         voteOption.getVotes().add(newVote);
+
         votes.put(newVote.getVoteId(), newVote);
 
         return newVote;
@@ -127,6 +155,9 @@ public class DomainManager {
 
     public Vote updateVote(Integer id, Vote updatedVote) {
         Vote existingVote = votes.get(id);
+        if (existingVote == null) {
+            throw new VoteNotFoundException("Vote not found.");
+        }
 
         if (!existingVote.getVoteOptionId().equals(updatedVote.getVoteOptionId()) &&
                 existingVote.getPollId().equals(updatedVote.getPollId())) {
@@ -134,6 +165,9 @@ public class DomainManager {
             removeVoteFromOption(existingVote);
 
             VoteOption newOption = voteOptions.get(updatedVote.getVoteOptionId());
+            if (newOption == null) {
+                throw new VoteOptionNotFoundException("Vote option not found.");
+            }
             existingVote.setVoteOptionId(updatedVote.getVoteOptionId());
             existingVote.setPublishedAt(updatedVote.getPublishedAt());
             newOption.getVotes().add(existingVote);
@@ -161,10 +195,12 @@ public class DomainManager {
     }
 
 
-    // Vote option metoder
+    // VoteOption CRUDs
     public VoteOption createVoteOption(VoteOption voteOption) {
         Poll poll = polls.get(voteOption.getPollId());
-
+        if (poll == null) {
+            throw new PollNotFoundException("Poll not found with ID: " + voteOption.getPollId());
+        }
 
         voteOption.setVoteOptionId(nextVoteOptionId++);
         voteOptions.put(voteOption.getVoteOptionId(), voteOption);
@@ -197,6 +233,9 @@ public class DomainManager {
 
     public VoteOption updateVoteOption(Integer voteOptionId, VoteOption updatedVoteOption) {
         VoteOption existingVoteOption = voteOptions.get(voteOptionId);
+        if (existingVoteOption == null) {
+            throw new VoteOptionNotFoundException("Vote option not found.");
+        }
 
         existingVoteOption.setCaption(updatedVoteOption.getCaption());
         existingVoteOption.setPresentationOrder(updatedVoteOption.getPresentationOrder());
@@ -207,6 +246,9 @@ public class DomainManager {
 
     public void deleteVoteOption(Integer voteOptionId) {
         VoteOption voteOption = voteOptions.remove(voteOptionId);
+        if (voteOption == null) {
+            throw new VoteOptionNotFoundException("Vote option not found.");
+        }
 
         votes.entrySet().removeIf(entry -> entry.getValue().getVoteOptionId().equals(voteOptionId));
 
@@ -215,6 +257,4 @@ public class DomainManager {
             parentPoll.getVoteOptions().removeIf(vo -> vo.getVoteOptionId().equals(voteOptionId));
         }
     }
-
 }
-

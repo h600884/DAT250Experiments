@@ -8,14 +8,14 @@ public class Poll {
 
 
     private Integer pollId;
-    private final String pollCreator;
+    private final String creatorUsername;
     private String question;
     private List<VoteOption> voteOptions;
     private Instant publishedAt;
     private Instant validUntil;
 
-    public Poll(String pollCreator, String question, Instant publishedAt, Instant validUntil) {
-        this.pollCreator = pollCreator;
+    public Poll(String creatorUsername, String question, Instant publishedAt, Instant validUntil) {
+        this.creatorUsername = creatorUsername;
         this.question = question;
         this.publishedAt = publishedAt;
         this.validUntil = validUntil;
@@ -28,7 +28,7 @@ public class Poll {
 
     public void setPollId(Integer pollId) { this.pollId = pollId; }
 
-    public String getPollCreator() { return pollCreator; }
+    public String getCreatorUsername() { return creatorUsername; }
 
     public String getQuestion() {
         return question;

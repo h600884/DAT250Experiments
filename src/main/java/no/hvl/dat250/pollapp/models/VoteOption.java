@@ -1,5 +1,6 @@
 package no.hvl.dat250.pollapp.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VoteOption {
@@ -10,12 +11,12 @@ public class VoteOption {
     private Integer presentationOrder;
     private List<Vote> votes;
 
-    public VoteOption(Integer voteOptionId, Integer pollId, String caption, Integer presentationOrder, List<Vote> votes) {
-        this.voteOptionId = voteOptionId;
+    public VoteOption(Integer pollId, String caption, Integer presentationOrder) {
         this.pollId = pollId;
         this.caption = caption;
         this.presentationOrder = presentationOrder;
-        this.votes = votes;
+        this.votes = new ArrayList<>();
+
     }
 
     public Integer getVoteOptionId() {

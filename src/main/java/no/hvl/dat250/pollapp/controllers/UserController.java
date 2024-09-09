@@ -1,6 +1,7 @@
 package no.hvl.dat250.pollapp.controllers;
 
-import no.hvl.dat250.pollapp.Managers.DomainManager;
+import no.hvl.dat250.pollapp.Managers.PollManager;
+import no.hvl.dat250.pollapp.Exception.UserNotFoundException;
 import no.hvl.dat250.pollapp.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,14 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    private DomainManager repo;
+    private PollManager repo;
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -26,9 +26,11 @@ public class UserController {
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         User user = repo.getUser(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -37,14 +39,18 @@ public class UserController {
 
     @PutMapping("/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
-        User updatedUser = repo.updateUser(username, user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        try {
+            User updatedUser = repo.updateUser(username, user);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         repo.deleteUser(username);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
