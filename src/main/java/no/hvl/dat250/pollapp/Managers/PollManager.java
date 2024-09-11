@@ -63,13 +63,25 @@ public class PollManager {
 
     // Poll CRUDs
     public Poll createPoll(Poll poll) {
-        if(!users.containsKey(poll.getCreatorUsername())) {
-            throw new InvalidUsername("Username '" + poll.getCreatorUsername() + "' does not exists.");
+        if (!users.containsKey(poll.getCreatorUsername())) {
+            throw new InvalidUsername("Username '" + poll.getCreatorUsername() + "' does not exist.");
         }
+
         poll.setPollId(nextPollId++);
+
+        int nextVoteOptionId = 1;
+        for (VoteOption option : poll.getVoteOptions()) {
+            option.setPollId(poll.getPollId());
+            option.setVoteOptionId(nextVoteOptionId++);
+        }
+
         polls.put(poll.getPollId(), poll);
+
         return poll;
     }
+
+
+
 
     public Poll getPoll(Integer id) {
         return polls.get(id);

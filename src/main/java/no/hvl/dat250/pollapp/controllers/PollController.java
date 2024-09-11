@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/polls")
+@CrossOrigin
 public class PollController {
 
     @Autowired

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/voteOptions")
+@CrossOrigin
 public class VoteOptionController {
 
     @Autowired
