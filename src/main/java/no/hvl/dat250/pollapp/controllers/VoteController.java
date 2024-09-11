@@ -34,7 +34,11 @@ public class VoteController {
     @GetMapping("/{id}")
     public ResponseEntity<Vote> getVote(@PathVariable Integer id) {
         Vote vote = repo.getVote(id);
-        return new ResponseEntity<>(vote, HttpStatus.OK);
+        if (vote != null) {
+            return new ResponseEntity<>(vote, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping
@@ -43,20 +47,21 @@ public class VoteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vote> updateVote(@PathVariable Integer id, @RequestBody Vote vote) {
+    public ResponseEntity<String> updateVote(@PathVariable Integer id, @RequestBody Vote vote) {
         try {
             Vote updatedVote = repo.updateVote(id, vote);
-            return new ResponseEntity<>(updatedVote, HttpStatus.OK);
+            return new ResponseEntity<>("Vote updated successfully!", HttpStatus.OK);
         } catch (VoteNotFoundException | VoteOptionNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Error updating vote: " + e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVote(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteVote(@PathVariable Integer id) {
         repo.deleteVote(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Vote deleted successfully!", HttpStatus.OK);
     }
 }
+
 
 

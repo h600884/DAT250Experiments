@@ -20,8 +20,8 @@ public class VoteOptionController {
 
     @PostMapping
     public ResponseEntity<VoteOption> createVoteOption(@RequestBody VoteOption voteOption) {
-        VoteOption createdVO = repo.createVoteOption(voteOption);
-        return new ResponseEntity<>(createdVO, HttpStatus.CREATED);
+        VoteOption createdVoteOption = repo.createVoteOption(voteOption);
+        return new ResponseEntity<>(createdVoteOption, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
