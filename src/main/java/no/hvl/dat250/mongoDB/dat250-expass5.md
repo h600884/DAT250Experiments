@@ -12,15 +12,26 @@ Solution: I had to use the delete crud to delete the collection after each time 
 
 #### Screenshots:
 
-The correct validation of the installation package:
+Thecorrect validation of the installation package:
+<img width="533" alt="Skjermbilde 2024-09-23 kl  12 50 20" src="https://github.com/user-attachments/assets/cb14f108-24f7-4080-a20e-f250b0679e1b">
 
 Insert CRUD:
+<img width="1236" alt="Skjermbilde 2024-09-24 kl  18 57 27" src="https://github.com/user-attachments/assets/38e8557c-0647-49fa-b9a1-dab53671fd31">
 
-Query CRUD: 
+Query CRUD:
+<img width="1146" alt="Skjermbilde 2024-09-24 kl  18 57 50" src="https://github.com/user-attachments/assets/541f4733-145e-427d-b73d-12724d252ffb">
 
 Update CRUD:
+<img width="1276" alt="Skjermbilde 2024-09-24 kl  18 58 55" src="https://github.com/user-attachments/assets/dd07240f-b001-4cde-868c-9fe533933075">
 
 Delete CRUD:
+<img width="1070" alt="Skjermbilde 2024-09-24 kl  18 59 41" src="https://github.com/user-attachments/assets/16fd048a-5dfe-4d35-96c9-82599bc3af2f">
+
+Map-reduce operation:
+<img width="299" alt="Skjermbilde 2024-09-24 kl  18 41 42" src="https://github.com/user-attachments/assets/497e22ea-23a9-4516-a36b-59680add33ad">
+
+Additional map-reduce operation:
+<img width="595" alt="Skjermbilde 2024-09-24 kl  18 42 23" src="https://github.com/user-attachments/assets/4bbd58cc-7532-4510-a6b3-ab1bc6b8d76a">
 
 #### Reason about why your implemented Map-reduce operation is useful and interpret the collection obtained.
 
