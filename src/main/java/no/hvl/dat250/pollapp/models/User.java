@@ -1,7 +1,5 @@
 package no.hvl.dat250.pollapp.models;
 
-import java.util.UUID;
-
 public class User {
 
     private String username;
