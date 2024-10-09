@@ -31,7 +31,9 @@ Container:
 
 #### Screenshot of the docker commands for building an image and creating a container that is running the image:
 Building an image using the dockerfile:
+
 <img width="458" alt="Skjermbilde 2024-10-09 kl  10 45 55" src="https://github.com/user-attachments/assets/71eef067-1c1a-419c-9008-0f7d79f1f237">
 
 Creating a container using the image:
+
 <img width="446" alt="Skjermbilde 2024-10-09 kl  10 46 13" src="https://github.com/user-attachments/assets/f8b09eaa-cc96-4fe6-983e-ce034e72c711">
