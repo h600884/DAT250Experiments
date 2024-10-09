@@ -5,6 +5,14 @@
 For the postgres image I used the official postgres docker image. In the documentation it stated I should use port 5432, but I was unable to do that since something that I don't know was using that port.
 Because of that I had to use port 5433 to connect to the database.
 
+#### Screenshot on how to bootstrap the database:
+<img width="1291" alt="Skjermbilde 2024-10-07 kl  13 18 49" src="https://github.com/user-attachments/assets/c94c2b43-2dc2-430e-b10e-dc50791c96be">
 
+#### Screenshot of connected database:
+<img width="390" alt="Skjermbilde 2024-10-07 kl  13 16 22" src="https://github.com/user-attachments/assets/fab2afce-67ff-4e20-bfde-da4f4071d84d">
+
+#### Screenshot of docker image and docker container
+<img width="989" alt="Skjermbilde 2024-10-09 kl  10 39 25" src="https://github.com/user-attachments/assets/fdfc8a9d-9d05-40a8-8b0c-8cbe4e00c20b">
+<img width="986" alt="Skjermbilde 2024-10-09 kl  10 39 17" src="https://github.com/user-attachments/assets/d7ae6757-76b3-4c21-95a5-c77dae101d78">
 
 ### My own docker image for the poll application
