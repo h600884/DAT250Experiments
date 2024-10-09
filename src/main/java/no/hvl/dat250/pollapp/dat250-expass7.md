@@ -19,7 +19,7 @@ Container that is created using the image:
 <img width="986" alt="Skjermbilde 2024-10-09 kl  10 39 17" src="https://github.com/user-attachments/assets/d7ae6757-76b3-4c21-95a5-c77dae101d78">
 
 ### My own docker image for the poll application
-The dockerfile can be found here: 
+The dockerfile can be found here: https://github.com/h600884/DAT250Experiments/blob/main/Dockerfile
 
 #### Screenshot of docker image and docker container for the poll application:
 Image:
